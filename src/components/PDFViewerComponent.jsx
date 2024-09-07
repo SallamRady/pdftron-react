@@ -109,9 +109,9 @@ export default function PDFViewerComponent(props) {
             // runWithCleanup will auto unlock when complete
             doc.lock();
             const s = await PDFNet.Stamper.create(
-              PDFNet.Stamper.SizeType.e_relative_scale,
-              0.5,
-              0.5
+              PDFNet.Stamper.SizeType.e_absolute_size,
+              200,
+              100
             );
 
             const img = await PDFNet.Image.createFromURL(doc, imageName);
@@ -121,6 +121,11 @@ export default function PDFViewerComponent(props) {
               PDFNet.Stamper.HorizontalAlignment.e_horizontal_right,
               PDFNet.Stamper.VerticalAlignment.e_vertical_bottom
             );
+            // Set the position offset (e.g., bottom margin of 50 points)
+            const horizontalOffset = 50; // No horizontal margin
+            const verticalOffset = 50; // 50 points bottom margin
+            await s.setPosition(horizontalOffset, verticalOffset);
+
             await s.stampImage(doc, img, pgSetImage);
           });
 
